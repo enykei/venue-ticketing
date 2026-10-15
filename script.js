@@ -9,6 +9,8 @@ const VENUE = {
 
 const seats = {};   
 
+let inspectedId = null;   
+
 function buildSeats() {
   VENUE.sections.forEach((section) => {
     for (let r = 1; r <= section.rows; r++) {
@@ -79,3 +81,31 @@ markUnavailable([
   "right-5-4",
 ]);
 renderVenue();
+
+const panelInfo = document.getElementById("panel-info");
+const addBtn = document.getElementById("add-btn");
+
+function inspectSeat(id) {
+  if (inspectedId && seats[inspectedId].status === "inspected") {
+    seats[inspectedId].status = "available";
+  }
+
+  inspectedId = id;
+  const s = seats[id];
+  s.status = "inspected";
+
+  panelInfo.innerHTML =
+    `<strong>${id.toUpperCase()}</strong><br>` +
+    `Section: ${s.section}<br>` +
+    `Row ${s.row}, Seat ${s.col}<br>` +
+    `Price: $${s.price}`;
+
+  addBtn.disabled = false;
+  renderVenue();
+}
+
+venueEl.addEventListener("click", (e) => {
+  const btn = e.target.closest(".seat");
+  if (!btn || btn.disabled) return;
+  inspectSeat(btn.dataset.id);
+});
