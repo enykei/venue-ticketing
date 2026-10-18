@@ -129,3 +129,13 @@ h1 {
   background: #ffd76a;
   border-color: #e0b000;
 }
+
+.seat.in-cart {
+  background: #6ac47a;
+  border-color: #3d9a4d;
+  color: #fff;
+}
+
+.seat.in-cart:hover {
+  background: #5cb86c;
+}

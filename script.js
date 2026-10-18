@@ -10,6 +10,7 @@ const VENUE = {
 const seats = {};   
 
 let inspectedId = null;   
+let cart = [];
 
 function buildSeats() {
   VENUE.sections.forEach((section) => {
@@ -59,7 +60,7 @@ function renderVenue() {
 
         const seatBtn = document.createElement("button");
         seatBtn.className = "seat";
-        if (seatData.status === "unavailable") seatBtn.classList.add("unavailable");
+        if (seatData.status !== "available") seatBtn.classList.add(seatData.status);
         seatBtn.textContent = `${section.id[0].toUpperCase()}${r}-${s}`;
         seatBtn.dataset.id = id;
         seatBtn.disabled = seatData.status === "unavailable";
@@ -86,12 +87,14 @@ const panelInfo = document.getElementById("panel-info");
 const addBtn = document.getElementById("add-btn");
 
 function inspectSeat(id) {
+  const s = seats[id];
+  if (s.status === "in-cart" || s.status === "unavailable") return;
+
   if (inspectedId && seats[inspectedId].status === "inspected") {
     seats[inspectedId].status = "available";
   }
 
   inspectedId = id;
-  const s = seats[id];
   s.status = "inspected";
 
   panelInfo.innerHTML =
@@ -108,4 +111,23 @@ venueEl.addEventListener("click", (e) => {
   const btn = e.target.closest(".seat");
   if (!btn || btn.disabled) return;
   inspectSeat(btn.dataset.id);
+});
+
+//  ADD TO CART 
+addBtn.addEventListener("click", () => {
+  if (!inspectedId) return;
+
+  const id = inspectedId;
+  const s = seats[id];
+
+  if (cart.includes(id)) return;
+
+  cart.push(id);
+  s.status = "in-cart";
+
+  inspectedId = null;
+  panelInfo.textContent = "Click a seat to inspect it.";
+  addBtn.disabled = true;
+
+  renderVenue();
 });
