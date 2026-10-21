@@ -129,5 +129,43 @@ addBtn.addEventListener("click", () => {
   panelInfo.textContent = "Click a seat to inspect it.";
   addBtn.disabled = true;
 
+  renderCart();
   renderVenue();
 });
+
+// ---------- CART UI ----------
+const cartListEl = document.getElementById("cart-list");
+const cartTotalEl = document.getElementById("cart-total");
+
+function renderCart() {
+  cartListEl.innerHTML = "";
+
+  cart.forEach((id) => {
+    const s = seats[id];
+    const li = document.createElement("li");
+
+    li.innerHTML =
+      `<span>${id.toUpperCase()} — $${s.price}</span>` +
+      `<button data-remove="${id}">Remove</button>`;
+
+    cartListEl.appendChild(li);
+  });
+
+  const total = cart.reduce((sum, id) => sum + seats[id].price, 0);
+  cartTotalEl.textContent = total;
+}
+
+cartListEl.addEventListener("click", (e) => {
+  const id = e.target.dataset.remove;
+  if (!id) return;
+  removeFromCart(id);
+});
+
+function removeFromCart(id) {
+  cart = cart.filter((x) => x !== id);
+  seats[id].status = "available";
+  renderCart();
+  renderVenue();
+}
+
+renderCart();

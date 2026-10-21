@@ -139,3 +139,55 @@ h1 {
 .seat.in-cart:hover {
   background: #5cb86c;
 }
+
+.cart {
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+  width: 260px;
+  max-height: 50vh;
+  overflow-y: auto;
+  background: #fff;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  padding: 16px;
+  text-align: left;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+}
+
+.cart h2 {
+  margin: 0 0 8px;
+  font-size: 1rem;
+}
+
+#cart-list {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 12px;
+}
+
+#cart-list li {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 6px 0;
+  border-bottom: 1px solid #eee;
+  font-size: 0.85rem;
+}
+
+#cart-list li button {
+  background: none;
+  border: none;
+  color: #c53030;
+  cursor: pointer;
+  font-size: 0.8rem;
+}
+
+#cart-list li button:hover {
+  text-decoration: underline;
+}
+
+.total {
+  font-weight: 600;
+  margin: 0;
+}
