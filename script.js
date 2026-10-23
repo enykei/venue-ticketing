@@ -12,6 +12,24 @@ const seats = {};
 let inspectedId = null;   
 let cart = [];
 
+const STORAGE_KEY = "venue-cart";
+
+function saveCart() {
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(cart));
+}
+
+function loadCart() {
+  const raw = localStorage.getItem(STORAGE_KEY);
+  if (!raw) return;
+  try {
+    const ids = JSON.parse(raw);
+    cart = ids.filter((id) => seats[id]);  // ignore stale IDs
+    cart.forEach((id) => { seats[id].status = "in-cart"; });
+  } catch {
+    cart = [];
+  }
+}
+
 function buildSeats() {
   VENUE.sections.forEach((section) => {
     for (let r = 1; r <= section.rows; r++) {
@@ -75,14 +93,6 @@ function renderVenue() {
   });
 }
 
-buildSeats();
-markUnavailable([
-  "center-1-1", "center-1-2", "center-1-3",
-  "left-3-2", "left-3-3",
-  "right-5-4",
-]);
-renderVenue();
-
 const panelInfo = document.getElementById("panel-info");
 const addBtn = document.getElementById("add-btn");
 
@@ -123,6 +133,7 @@ addBtn.addEventListener("click", () => {
   if (cart.includes(id)) return;
 
   cart.push(id);
+  saveCart();
   s.status = "in-cart";
 
   inspectedId = null;
@@ -163,9 +174,18 @@ cartListEl.addEventListener("click", (e) => {
 
 function removeFromCart(id) {
   cart = cart.filter((x) => x !== id);
-  seats[id].status = "available";
+  saveCart();
+  if (seats[id]) seats[id].status = "available";
   renderCart();
   renderVenue();
 }
 
+buildSeats();
+markUnavailable([
+  "center-1-1", "center-1-2", "center-1-3",
+  "left-3-2", "left-3-3",
+  "right-5-4",
+]);
+loadCart();
+renderVenue();
 renderCart();
