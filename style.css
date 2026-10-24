@@ -191,3 +191,28 @@ h1 {
   font-weight: 600;
   margin: 0;
 }
+
+.controls {
+  display: flex;
+  justify-content: center;
+  gap: 6px;
+  margin-bottom: 24px;
+}
+
+.controls button {
+  padding: 6px 12px;
+  border: 1px solid #ccc;
+  background: #fff;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 0.9rem;
+}
+
+.controls button:hover {
+  background: #f0f0f0;
+}
+
+.venue {
+  transform-origin: top center;
+  transition: transform 0.15s ease;
+}

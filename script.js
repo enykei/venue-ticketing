@@ -12,6 +12,12 @@ const seats = {};
 let inspectedId = null;   
 let cart = [];
 
+const view = { scale: 1, x: 0, y: 0 };
+const MIN_SCALE = 0.5;
+const MAX_SCALE = 2;
+const PAN_STEP = 40;
+const ZOOM_STEP = 0.15;
+
 const STORAGE_KEY = "venue-cart";
 
 function saveCart() {
@@ -189,3 +195,24 @@ markUnavailable([
 loadCart();
 renderVenue();
 renderCart();
+
+// ---------- NAVIGATION ----------
+function applyView() {
+  venueEl.style.transform =
+    `translate(${view.x}px, ${view.y}px) scale(${view.scale})`;
+}
+
+document.querySelector(".controls").addEventListener("click", (e) => {
+  const action = e.target.dataset.nav;
+  if (!action) return;
+
+  if (action === "zoom-in")  view.scale = Math.min(MAX_SCALE, view.scale + ZOOM_STEP);
+  if (action === "zoom-out") view.scale = Math.max(MIN_SCALE, view.scale - ZOOM_STEP);
+  if (action === "up")       view.y -= PAN_STEP;
+  if (action === "down")     view.y += PAN_STEP;
+  if (action === "left")     view.x -= PAN_STEP;
+  if (action === "right")    view.x += PAN_STEP;
+  if (action === "reset")    { view.scale = 1; view.x = 0; view.y = 0; }
+
+  applyView();
+});
