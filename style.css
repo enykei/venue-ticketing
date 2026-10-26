@@ -216,3 +216,34 @@ h1 {
   transform-origin: top center;
   transition: transform 0.15s ease;
 }
+
+@media (max-width: 900px) {
+  body { padding: 16px; }
+
+  h1 { font-size: 1.4rem; }
+
+  .venue {
+    flex-direction: column;
+    gap: 24px;
+  }
+
+  .section { width: 100%; }
+
+  .seat {
+    width: 28px;
+    height: 28px;
+    font-size: 0.55rem;
+  }
+
+  .panel, .cart {
+    position: static;
+    width: 100%;
+    max-width: 400px;
+    margin: 16px auto;
+    box-shadow: none;
+  }
+
+  .controls {
+    flex-wrap: wrap;
+  }
+}
