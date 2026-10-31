@@ -247,3 +247,13 @@ h1 {
     flex-wrap: wrap;
   }
 }
+
+.venue {
+  cursor: grab;
+  user-select: none;
+}
+
+.venue.dragging {
+  cursor: grabbing;
+  transition: none;
+}

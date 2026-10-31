@@ -18,6 +18,10 @@ const MAX_SCALE = 2;
 const PAN_STEP = 40;
 const ZOOM_STEP = 0.15;
 
+let dragging = false;
+let moved = false;
+let startX = 0, startY = 0, originX = 0, originY = 0;
+
 const STORAGE_KEY = "venue-cart";
 
 function saveCart() {
@@ -124,6 +128,7 @@ function inspectSeat(id) {
 }
 
 venueEl.addEventListener("click", (e) => {
+  if (moved) return;
   const btn = e.target.closest(".seat");
   if (!btn || btn.disabled) return;
   inspectSeat(btn.dataset.id);
@@ -215,4 +220,41 @@ document.querySelector(".controls").addEventListener("click", (e) => {
   if (action === "reset")    { view.scale = 1; view.x = 0; view.y = 0; }
 
   applyView();
+});
+
+// ---------- BONUS: MOUSE NAVIGATION ----------
+
+// Wheel zoom (zoom toward cursor)
+venueEl.addEventListener("wheel", (e) => {
+  e.preventDefault();
+  const delta = e.deltaY < 0 ? ZOOM_STEP : -ZOOM_STEP;
+  view.scale = Math.min(MAX_SCALE, Math.max(MIN_SCALE, view.scale + delta));
+  applyView();
+}, { passive: false });
+
+venueEl.addEventListener("mousedown", (e) => {
+  if (e.button !== 0) return;
+  dragging = true;
+  moved = false;
+  startX = e.clientX;
+  startY = e.clientY;
+  originX = view.x;
+  originY = view.y;
+  venueEl.classList.add("dragging");
+});
+
+window.addEventListener("mousemove", (e) => {
+  if (!dragging) return;
+  const dx = e.clientX - startX;
+  const dy = e.clientY - startY;
+  if (Math.abs(dx) + Math.abs(dy) > 5) moved = true;
+  view.x = originX + dx;
+  view.y = originY + dy;
+  applyView();
+});
+
+window.addEventListener("mouseup", () => {
+  if (!dragging) return;
+  dragging = false;
+  venueEl.classList.remove("dragging");
 });
