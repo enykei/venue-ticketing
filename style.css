@@ -97,6 +97,7 @@ h1 {
   padding: 16px;
   text-align: left;
   box-shadow: 0 4px 8px rgba(0,0,0,0.08);
+  z-index: 10;
 }
 
 .panel h2 {
@@ -153,6 +154,7 @@ h1 {
   padding: 16px;
   text-align: left;
   box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+  z-index: 10;
 }
 
 .cart h2 {
@@ -193,6 +195,8 @@ h1 {
 }
 
 .controls {
+  position: relative;
+  z-index: 10;
   display: flex;
   justify-content: center;
   gap: 6px;

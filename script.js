@@ -203,8 +203,10 @@ renderCart();
 
 // ---------- NAVIGATION ----------
 function applyView() {
-  venueEl.style.transform =
-    `translate(${view.x}px, ${view.y}px) scale(${view.scale})`;
+  const maxPan = 300;
+  view.x = Math.max(-maxPan, Math.min(maxPan, view.x));
+  view.y = Math.max(-maxPan, Math.min(maxPan, view.y));
+  venueEl.style.transform = `translate(${view.x}px, ${view.y}px) scale(${view.scale})`;
 }
 
 document.querySelector(".controls").addEventListener("click", (e) => {
