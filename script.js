@@ -110,6 +110,16 @@ function inspectSeat(id) {
   const s = seats[id];
   if (s.status === "in-cart" || s.status === "unavailable") return;
 
+  // Clicking the already-selected seat deselects it
+  if (inspectedId === id) {
+    s.status = "available";
+    inspectedId = null;
+    panelInfo.textContent = "Click a seat to inspect it.";
+    addBtn.disabled = true;
+    renderVenue();
+    return;
+  }
+
   if (inspectedId && seats[inspectedId].status === "inspected") {
     seats[inspectedId].status = "available";
   }
